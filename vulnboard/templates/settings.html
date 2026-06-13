@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>계정 설정 (CSRF 취약 데모)</h2>
+<p class="text-muted">Ch07 CSRF 취약점 연습용 페이지입니다. CSRF 토큰이 전혀 없습니다.</p>
+
+{% if message %}
+<div class="alert alert-success">{{ message }}</div>
+{% endif %}
+
+<div class="card" style="max-width: 480px;">
+  <div class="card-body">
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">이메일 변경</label>
+        <input type="email" name="email" class="form-control" value="{{ current_email }}" required>
+        <div class="form-text">아무 이메일이나 입력하고 저장해보세요.</div>
+      </div>
+      <button class="btn btn-primary">저장</button>
+    </form>
+  </div>
+</div>
+
+<div class="card border-warning mt-4">
+  <div class="card-header bg-warning">💡 CSRF 공격 시나리오 (책 Ch07)</div>
+  <div class="card-body small">
+    <p>이 폼에는 CSRF 토큰이 없습니다. 따라서 공격자는 다음과 같은 HTML을 만들어 피해자에게 방문하게 할 수 있습니다:</p>
+    <pre class="bg-light p-2 small"><code>&lt;form action="http://127.0.0.1:5002/settings" method="POST"&gt;
+  &lt;input type="hidden" name="email" value="attacker@evil.com"&gt;
+  &lt;input type="submit" value="무료 쿠폰 받기"&gt;
+&lt;/form&gt;</code></pre>
+    <p class="mb-0">피해자가 로그인된 상태로 이 페이지를 방문하면, 의도치 않게 이메일이 변경됩니다.</p>
+    <p class="mt-2 mb-0"><strong>방어:</strong> CSRF 토큰 + SameSite 쿠키 + 중요한 작업은 재인증.</p>
+  </div>
+</div>
+
+<p class="mt-3"><a href="/guide" class="btn btn-sm btn-outline-primary">📖 학습 가이드에서 Ch07 설명 보기</a></p>
+{% endblock %}

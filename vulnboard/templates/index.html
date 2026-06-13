@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">VulnBoard</h1>
+    <p class="lead">웹 해킹 실습을 위한 <span class="vuln-highlight">의도적으로 취약한</span> 커뮤니티 사이트</p>
+    <p class="text-muted">크리핵티브의 한 권으로 끝내는 웹 해킹 바이블 실습용 — 그냥 읽지 말고, <strong>직접 공격해보세요</strong></p>
+    
+    <div class="mt-4">
+        <a href="/guide" class="btn btn-primary btn-lg px-5">📚 지금 바로 "책 정복 로드맵" 보기 (이걸 따라가세요!)</a>
+        <a href="/login" class="btn btn-outline-secondary btn-lg">로그인 페이지로 가기</a>
+    </div>
+</div>
+
+<!-- 친절한 시작 가이드 -->
+<div class="card mb-4 border-primary">
+    <div class="card-header bg-primary text-white">
+        <strong>🚀 처음 오셨나요? 5분만 따라오세요 (가장 중요)</strong>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="text-primary">준비 단계 (꼭!)</h6>
+                <ol class="small">
+                    <li><strong>Burp Suite</strong>를 실행하고 Proxy를 127.0.0.1:8080 으로 켜두세요.</li>
+                    <li>브라우저 프록시를 Burp로 설정 (FoxyProxy 또는 수동 설정).</li>
+                    <li>이 페이지의 모든 클릭/폼 전송은 <strong>Burp의 HTTP History와 Repeater</strong>로 확인하세요.</li>
+                </ol>
+                <div class="alert alert-warning py-2 small mb-0">
+                    <strong>중요:</strong> 브라우저 주소창에 직접 입력하는 것보다, Burp Repeater에서 요청을 복사해서 수정하는 연습을 하세요. 이게 진짜 해킹입니다.
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-primary">추천 첫 걸음</h6>
+                <ol class="small">
+                    <li><a href="/login">/login</a> 에서 평범하게 <code>chulsu</code> / <code>test123</code> 로 로그인해보기</li>
+                    <li>로그인 후 <a href="/board">게시판</a>에서 검색창에 아무거나 입력해보기</li>
+                    <li><a href="/guide">학습 가이드</a>를 열고 <strong>Level 1부터 따라가기</strong></li>
+                </ol>
+                <p class="mb-1 small"><strong>기본 계정 (평범 로그인용)</strong></p>
+                <ul class="small mb-0">
+                    <li>chulsu / test123 (일반 사용자)</li>
+                    <li>sumi / sumi2025</li>
+                    <li>admin / admin123!@# (관리자 — 나중에 SQLi로 뚫어보기)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card mb-4">
+            <div class="card-header">🎯 이 사이트에서 연습할 수 있는 공격 (책 챕터 매핑)</div>
+            <div class="card-body">
+                <table class="table table-sm mb-0">
+                    <tr><td><strong>Level 1</strong></td><td>로그인 SQL Injection (가장 기본, admin 우회)</td><td><a href="/login" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
+                    <tr><td><strong>Level 2</strong></td><td>게시판 검색 + UNION 기반 데이터 추출</td><td><a href="/board" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
+                    <tr><td><strong>Level 3</strong></td><td>게시글 ID 기반 SQLi (가장 현실적)</td><td><a href="/board" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
+                    <tr><td><strong>Level 4~5</strong></td><td>Boolean / Time-based Blind SQLi</td><td><a href="/search" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
+                    <tr><td><strong>기타</strong></td><td>Stored XSS (댓글), IDOR (프로필), Broken Access (/admin), File Upload, Command Injection</td><td><a href="/guide" class="btn btn-sm btn-outline-secondary">가이드에서 보기</a></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">💡 실험하다 망가졌을 때</div>
+            <div class="card-body small">
+                <p class="mb-1"><strong>DB 초기화</strong> 버튼을 누르거나 주소창에 <a href="/reset" class="fw-bold">/reset</a> 를 직접 입력하세요.</p>
+                <p class="mb-0">실습 중 DB가 엉망이 되어도 언제든 처음 상태로 돌릴 수 있습니다. 마음껏 부숴보세요!</p>
+                <div class="mt-2">
+                    <a href="/reset" class="btn btn-sm btn-danger" onclick="return confirm('정말 DB를 초기화할까요? 현재 로그인도 풀립니다.')">지금 DB 초기화하기</a>
+                    <a href="/debug/db" class="btn btn-sm btn-info">현재 DB 상태 보기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <strong>학습 팁:</strong> 이 사이트는 "취약점을 숨기는" 게 아니라, <strong>친절하게 알려주면서</strong> 연습하게 만드는 게 목적입니다. 
+    상단 <strong>📖 학습 가이드</strong> 버튼을 항상 열어두고, 각 페이지에 나오는 설명을 천천히 읽으면서 따라가보세요.
+</div>
+{% endblock %}

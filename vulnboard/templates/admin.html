@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-danger">관리자 패널</h2>
+<p class="lead">🎉 여기에 도착했다면, 이미 <strong>SQL Injection 또는 권한 상승</strong>에 성공한 상태입니다!</p>
+
+<div class="alert alert-success">
+    <strong>이 페이지에 오는 방법 (다양하게 시도해보세요)</strong>
+    <ul class="mb-0 small">
+        <li>Level 1에서 <code>admin' -- </code> 로 로그인하면서 is_admin=1 세션을 얻기</li>
+        <li>로그인 후 Burp로 세션 쿠키나 <code>is_admin</code> 값을 직접 조작하기</li>
+        <li>/admin?admin=1 같은 파라미터를 추가해서 우회 시도 (현재는 체크를 안 하게 되어있음)</li>
+    </ul>
+</div>
+
+<h4>전체 사용자</h4>
+<table class="table table-sm">
+    <tr><th>ID</th><th>아이디</th><th>닉네임</th><th>이메일</th><th>관리자</th><th>작업</th></tr>
+    {% for u in users %}
+    <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.nickname }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ '예' if u.is_admin else '아니오' }}</td>
+        <td>
+            <form method="post" action="/admin/users/{{ u.id }}/delete" style="display:inline">
+                <button class="btn btn-sm btn-danger" onclick="return confirm('정말?')">삭제</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h4 class="mt-4">Secrets 테이블 (이게 진짜 목표)</h4>
+<table class="table table-sm table-bordered">
+    <tr><th>ID</th><th>Owner</th><th>Secret</th><th>Flag</th></tr>
+    {% for s in secrets %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.owner }}</td>
+        <td>{{ s.secret }}</td>
+        <td><span class="flag">{{ s.flag }}</span></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div class="card border-success">
+    <div class="card-body">
+        <p class="mb-1"><strong>축하합니다!</strong> 이제 이 테이블의 모든 FLAG를 SQL Injection으로 직접 추출하는 게 이 사이트의 핵심 미션 중 하나입니다.</p>
+        <p class="mb-0 small">아직 못 얻었다면 <a href="/guide" class="fw-bold">📖 학습 가이드</a>로 돌아가서 Level 2~3을 다시 도전해보세요.</p>
+    </div>
+</div>
+{% endblock %}

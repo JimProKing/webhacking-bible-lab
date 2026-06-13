@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>파일 업로드</h2>
+<p class="text-muted">파일 업로드 취약점 (Ch09) 연습 페이지입니다. 업로드 후 바로 실행되는 "웹쉘"을 만드는 게 목표입니다.</p>
+
+<form method="post" enctype="multipart/form-data" class="mb-4">
+    <div class="mb-3">
+        <input type="file" name="file" class="form-control" required>
+    </div>
+    <button class="btn btn-primary">업로드</button>
+</form>
+
+<h5>업로드된 파일 목록 (직접 접근 가능)</h5>
+<ul>
+    {% for f in files %}
+        <li>
+            <a href="/uploads/{{ f.filename }}" target="_blank">{{ f.original_name }}</a>
+            (by {{ f.username }})
+        </li>
+    {% else %}
+        <li>업로드된 파일이 없습니다.</li>
+    {% endfor %}
+</ul>
+
+<div class="card border-warning mt-3">
+    <div class="card-header bg-warning">
+        <strong>💡 이 페이지에서 시도해볼 것 (친절 가이드)</strong>
+    </div>
+    <div class="card-body small">
+        <ol class="mb-2">
+            <li>아무 .txt 파일을 업로드해보고, 목록에 나온 링크를 클릭해서 <code>/uploads/파일명</code> 으로 직접 접근이 되는지 확인</li>
+            <li>확장자 우회: <code>test.py</code> 또는 <code>shell.phtml</code> 같은 파일을 만들어 업로드 시도</li>
+            <li>경로 조작: 파일명을 <code>../../something.txt</code> 로 바꿔서 상위 폴더에 쓰기 시도 (Path Traversal)</li>
+            <li>업로드 후 <code>/uploads/내가올린파일.py</code> 로 직접 호출해보기</li>
+        </ol>
+
+        <div class="bg-light p-2 rounded">
+            <strong>이 앱은 Python이므로</strong>, .py 파일을 업로드하고 그 파일을 실행하는 형태로 공격을 구성할 수 있습니다.<br>
+            (실제 PHP/JSP 환경에서는 .php 웹쉘을 올리는 게 일반적입니다)
+        </div>
+
+        <p class="mb-0 mt-2"><a href="/guide" class="fw-bold">📖 학습 가이드</a>에서 File Upload 챌린지 부분도 함께 읽어보세요.</p>
+    </div>
+</div>
+{% endblock %}

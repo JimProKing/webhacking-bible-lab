@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if post %}
+    <h2>{{ post.title }}</h2>
+    <p class="text-muted">작성자: <a href="/profile/{{ post.nickname }}">{{ post.nickname }}</a> | {{ post.created_at }}</p>
+
+    <div class="card mb-4">
+        <div class="card-body" style="white-space: pre-wrap;">{{ post.content }}</div>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger small">
+        <strong>쿼리 에러 (에러 기반 SQLi 연습용):</strong><br>
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- ID 기반 SQLi 친절 가이드 -->
+    <div class="card border-danger mb-4">
+        <div class="card-header bg-danger text-white">
+            <strong>💡 이 페이지의 핵심: URL의 숫자(ID)로 SQL Injection 하기 (Level 3)</strong>
+        </div>
+        <div class="card-body small">
+            <p><strong>현실에서 가장 많이 보는 패턴</strong>입니다. <code>/post/1</code>, <code>/view?id=5</code>, <code>/product/42</code> 같은 곳이 전부 이 유형입니다.</p>
+
+            <h6>공격 단계</h6>
+            <ol class="mb-2">
+                <li>주소창 끝에 <code>'</code> 를 붙여 에러를 유발해보세요.<br>
+                    예: <code>/post/1'</code></li>
+                <li>에러 메시지에서 컬럼 수와 구조를 파악하세요.</li>
+                <li>아래처럼 UNION 공격을 URL에 직접 넣어보세요:</li>
+            </ol>
+
+            <div class="bg-light p-2 rounded mb-2">
+                <div><code>/post/1' UNION SELECT 1,username,password,4,5,6 FROM users--</code></div>
+                <div class="mt-1"><code>/post/1 AND 1=2 UNION SELECT id,owner,secret,flag,5,6 FROM secrets--</code></div>
+            </div>
+
+            <p class="mb-1"><strong>컬럼 수를 모르겠다면?</strong> 먼저 <code>' ORDER BY 1--</code>, <code>' ORDER BY 2--</code> ... 로 숫자를 올려가며 테스트하세요.</p>
+            <p class="mb-0 text-muted">에러가 나는 순간의 직전 숫자가 컬럼 개수입니다.</p>
+        </div>
+    </div>
+
+    <h4>댓글 (Stored XSS 연습)</h4>
+    <form method="post" action="/post/{{ post.id }}/comment" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="content" class="form-control" placeholder="댓글을 입력하세요. &lt;script&gt;alert(1)&lt;/script&gt; 도 넣어보세요" required>
+            <button class="btn btn-primary" type="submit">등록</button>
+        </div>
+    </form>
+
+    <ul class="list-group">
+        {% for c in comments %}
+            <li class="list-group-item">
+                <strong>{{ c.nickname }}</strong> <span class="text-muted small">{{ c.created_at[:16] }}</span><br>
+                <div style="white-space: pre-wrap;">{{ c.content | safe }}</div>
+            </li>
+        {% else %}
+            <li class="list-group-item text-muted">아직 댓글이 없습니다.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="mt-3 small text-muted">
+        더 자세한 설명과 페이로드는 <a href="/guide" class="fw-bold">📖 학습 가이드 - Level 3</a> 를 참고하세요.
+    </div>
+{% else %}
+    <div class="alert alert-danger">게시글을 찾을 수 없습니다. (ID injection으로 다른 글도 불러보세요)</div>
+{% endif %}
+
+<a href="/board" class="btn btn-secondary mt-3">← 게시판으로</a>
+{% endblock %}
