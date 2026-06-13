@@ -36,6 +36,7 @@ python app.py
 준비되면 `cd vulnboard && python app.py` 실행 → **📖 학습 가이드**부터 따라가세요.
 
 ### 학습 순서 팁 (중요)
-- **curl + DevTools 먼저** (`02-http-curl-devtools`) → HTTP를 손으로 직접 만드는 감을 익히세요.
+- **curl + DevTools 먼저** (`02-http-curl-devtools`) → HTTP를 손으로 직접 만들고, **Network 탭으로 요청을 가로채고(Copy as fetch), Console로 수정하며, 수동 세션 하이재킹까지** 연습하세요.
+  - Fetch/XHR에 요청이 안 보이는 문제 해결법, 전용 실습 버튼, 하이재킹 데모까지 포함.
 - 그 다음 Burp (`02-http-burp`)를 배우면 "이 도구가 왜 이렇게 편한지"가 제대로 와닿습니다.
 - Burp는 강력하지만, 처음부터 Burp만 쓰면 curl/DevTools로 직접 조작하는 근력이 약해집니다.
