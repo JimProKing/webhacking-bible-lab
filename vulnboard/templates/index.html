@@ -4,11 +4,11 @@
 <div class="px-4 py-5 my-5 text-center">
     <h1 class="display-5 fw-bold">VulnBoard</h1>
     <p class="lead">웹 해킹 실습을 위한 <span class="vuln-highlight">의도적으로 취약한</span> 커뮤니티 사이트</p>
-    <p class="text-muted">크리핵티브의 한 권으로 끝내는 웹 해킹 바이블 실습용 — 그냥 읽지 말고, <strong>직접 공격해보세요</strong></p>
+    <p class="text-muted">크리핵티브의 한 권으로 끝내는 웹 해킹 바이블 실습용 — <strong>📘 정복 문제집</strong>만 따라가면 책을 온전히 마스터합니다.</p>
     
     <div class="mt-4">
-        <a href="/guide" class="btn btn-primary btn-lg px-5">📚 지금 바로 "책 정복 로드맵" 보기 (이걸 따라가세요!)</a>
-        <a href="/login" class="btn btn-outline-secondary btn-lg">로그인 페이지로 가기</a>
+        <a href="/lab" class="btn btn-danger btn-lg px-5 fw-bold">📘 정복 문제집 시작하기 (이것만 끝내면 책 마스터)</a>
+        <a href="/login" class="btn btn-outline-secondary btn-lg ms-2">로그인 페이지로 가기</a>
     </div>
 </div>
 
@@ -35,7 +35,7 @@
                 <ol class="small">
                     <li><a href="/login">/login</a> 에서 평범하게 <code>chulsu</code> / <code>test123</code> 로 로그인해보기</li>
                     <li>로그인 후 <a href="/board">게시판</a>에서 검색창에 아무거나 입력해보기</li>
-                    <li><a href="/guide">학습 가이드</a>를 열고 <strong>Level 1부터 따라가기</strong></li>
+                    <li><a href="/lab">정복 문제집</a>을 열고 <strong>문제 01번부터 순서대로 따라가기</strong></li>
                 </ol>
                 <p class="mb-1 small"><strong>기본 계정 (평범 로그인용)</strong></p>
                 <ul class="small mb-0">
@@ -54,11 +54,10 @@
             <div class="card-header">🎯 이 사이트에서 연습할 수 있는 공격 (책 챕터 매핑)</div>
             <div class="card-body">
                 <table class="table table-sm mb-0">
-                    <tr><td><strong>Level 1</strong></td><td>로그인 SQL Injection (가장 기본, admin 우회)</td><td><a href="/login" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
-                    <tr><td><strong>Level 2</strong></td><td>게시판 검색 + UNION 기반 데이터 추출</td><td><a href="/board" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
-                    <tr><td><strong>Level 3</strong></td><td>게시글 ID 기반 SQLi (가장 현실적)</td><td><a href="/board" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
-                    <tr><td><strong>Level 4~5</strong></td><td>Boolean / Time-based Blind SQLi</td><td><a href="/search" class="btn btn-sm btn-outline-primary">도전</a></td></tr>
-                    <tr><td><strong>기타</strong></td><td>Stored XSS (댓글), IDOR (프로필), Broken Access (/admin), File Upload, Command Injection</td><td><a href="/guide" class="btn btn-sm btn-outline-secondary">가이드에서 보기</a></td></tr>
+                    <tr><td><strong>문제 04~08</strong></td><td>SQL Injection 전 스펙트럼 (로그인 우회 → UNION → Blind)</td><td><a href="/lab" class="btn btn-sm btn-danger">정복 문제집</a></td></tr>
+                    <tr><td><strong>문제 09~13</strong></td><td>Command Injection, Stored XSS, CSRF, 파일, IDOR/BAC</td><td><a href="/lab" class="btn btn-sm btn-danger">정복 문제집</a></td></tr>
+                    <tr><td><strong>문제 14~15</strong></td><td>방어 실습 (소스코드 고치기)</td><td><a href="/lab" class="btn btn-sm btn-danger">정복 문제집</a></td></tr>
+                    <tr><td><strong>전체</strong></td><td>Ch01~Ch19까지 한국식 문제집 스타일로 체계 정리됨</td><td><a href="/lab" class="btn btn-sm btn-danger">📘 지금 시작</a></td></tr>
                 </table>
             </div>
         </div>

@@ -30,8 +30,9 @@ import random
 from datetime import datetime
 from flask import (
     Flask, request, render_template, redirect, url_for,
-    session, flash, send_from_directory, make_response
+    session, flash, send_from_directory, make_response, jsonify
 )
+from lab_problems import PROBLEMS, get_problem, get_all_parts, get_progress_stats
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -212,8 +213,36 @@ def index():
 
 @app.route('/guide')
 def guide():
-    """사이트 안에 친절하게 포함된 상세 학습 가이드 (HACKING_CHALLENGES.md의 친절 버전)"""
+    """기존 가이드 (레거시). 새로 만든 문제집 /lab 을 추천."""
     return render_template('guide.html')
+
+
+# ============================================================
+# 새로운 한국식 문제집 (문제 객체화 + 풀이)
+# "이 문제집 하나만 끝까지 따라하면 책을 온전히 마스터할 수 있다"
+# ============================================================
+
+@app.route('/lab')
+def lab():
+    """크리핵티브 웹 해킹 바이블 정복 문제집 - 메인 진입점"""
+    parts = get_all_parts()
+    return render_template('lab.html', problems=PROBLEMS, parts=parts)
+
+@app.route('/problem/<int:pid>')
+def problem_detail(pid):
+    prob = get_problem(pid)
+    if not prob:
+        flash("해당 문제가 없습니다.")
+        return redirect(url_for('lab'))
+    return render_template('problem_detail.html', prob=prob)
+
+@app.route('/lab/progress', methods=['POST'])
+def lab_progress():
+    """클라이언트(localStorage)에서 보낸 solved_ids를 받아 통계 반환 (선택 사용)"""
+    data = request.get_json(silent=True) or {}
+    solved = data.get('solved', [])
+    stats = get_progress_stats(solved)
+    return jsonify(stats)
 
 
 @app.route('/board')
