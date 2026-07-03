@@ -6,3 +6,5 @@ venv/
 .venv/
 *.log
 .DS_Store
+mcps/
+problems/cookies.txt

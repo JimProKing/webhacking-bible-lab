@@ -49,12 +49,12 @@
 
         <h6 class="text-success">✅ 이 챕터를 실습으로 정복하는 방법</h6>
         <ol>
-            <li><strong>01-basics 앱 실행</strong><br>
-                <code>cd 01-basics && python app.py</code> → http://127.0.0.1:5000<br>
+            <li><strong>문제 01 앱 실행</strong><br>
+                <code>cd problems/01-파라미터-변조-기초 && python app.py</code> → http://127.0.0.1:5000<br>
                 <code>?owner=sumi</code> 와 <code>?owner=admin</code> 로 다른 사람 비밀 메모/플래그 직접 탈취
             </li>
-            <li><strong>02-http-burp 앱 실행</strong><br>
-                <code>cd 02-http-burp && python app.py</code> → http://127.0.0.1:5001<br>
+            <li><strong>문제 03 앱 실행 (Burp 연습)</strong><br>
+                <code>cd problems/03-Burp-Repeater-마스터 && python app.py</code> → http://127.0.0.1:5001<br>
                 Burp Intercept ON 상태에서 ?user= 파라미터를 sumi, admin으로 바꿔서 정보 탈취 체험
             </li>
             <li><strong>코드로 원인 확인</strong><br>
@@ -88,7 +88,7 @@
 
         <h6 class="text-success">✅ 이 챕터를 실습으로 정복하는 방법 (가장 중요! 반복 추천)</h6>
         <ol>
-            <li><strong>02-http-burp를 Burp와 함께 철저히 파괴</strong><br>
+            <li><strong>문제 03 앱을 Burp와 함께 철저히 파괴</strong><br>
                 - GET 파라미터 변조 (/profile?user=...)<br>
                 - POST 바디 확인 (로그인 폼)<br>
                 - 쿠키 탈취 및 세션 하이재킹 (/myinfo)<br>

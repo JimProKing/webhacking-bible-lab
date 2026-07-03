@@ -20,9 +20,9 @@ PROBLEMS = [
         "title": "파라미터 변조로 다른 사람 비밀 메모 탈취",
         "difficulty": "★☆☆☆☆",
         "category": "기초 / 입력값 검증 미흡",
-        "objective": "01-basics 앱에서 owner 파라미터를 조작해, 로그인 없이 수미와 관리자의 비밀 정보를 확인한다.",
+        "objective": "문제 01 전용 앱에서 owner 파라미터를 조작해, 로그인 없이 수미와 관리자의 비밀 정보를 확인한다.",
         "entry_points": [
-            {"label": "01-basics 앱 실행", "url": "http://127.0.0.1:5000/", "note": "cd 01-basics && python app.py"},
+            {"label": "문제 01 앱 실행", "url": "http://127.0.0.1:5000/", "note": "cd problems/01-파라미터-변조-기초 && python app.py"},
             {"label": "수미 메모 공격", "url": "http://127.0.0.1:5000/memo?owner=sumi"},
             {"label": "admin 플래그 공격", "url": "http://127.0.0.1:5000/memo?owner=admin"},
         ],
@@ -41,7 +41,7 @@ PROBLEMS = [
         "solution": "서버가 owner 파라미터를 받아 'WHERE owner = ?' 쿼리에 그대로 사용하면서, '이 요청을 보낸 사용자가 해당 owner의 데이터를 볼 권한이 있는가?'에 대한 검사를 전혀 하지 않는다. 이것이 책 Ch01이 강조하는 '사용자 입력값 검증 미흡'의 가장 단순하고 강력한 예시다.",
         "secure_snippet": "# 취약: owner = request.args.get('owner')\n# c.execute(\"SELECT * FROM memos WHERE owner = ?\", (owner,))\n\n# 방어: 현재 사용자 권한 + 소유자 검증 추가\nif current_user.username != owner and not current_user.is_admin:\n    abort(403)",
         "book_refs": "Ch01. 웹 해킹에 대한 이해 - 1.2 해커들의 공격 맛집, 웹",
-        "lab_target": "01-basics",
+        "lab_target": "problems/01-파라미터-변조-기초",
         "flags": []
     },
     {
@@ -52,9 +52,9 @@ PROBLEMS = [
         "title": "HTTP 요청을 손으로 직접 만들고 조작하기 (curl + DevTools)",
         "difficulty": "★☆☆☆☆",
         "category": "HTTP 기초 / Burp 이전 근력",
-        "objective": "02-http-curl-devtools 앱에서 curl.exe와 브라우저 Console fetch로 GET/POST/쿠키를 직접 작성·조작한다. Burp 없이도 HTTP를 '손으로' 느끼는 것이 목표.",
+        "objective": "문제 02 전용 앱에서 curl.exe와 브라우저 Console fetch로 GET/POST/쿠키를 직접 작성·조작한다. Burp 없이도 HTTP를 '손으로' 느끼는 것이 목표.",
         "entry_points": [
-            {"label": "02-http-curl-devtools 실행", "url": "http://127.0.0.1:5003/", "note": "cd 02-http-curl-devtools && python app.py"},
+            {"label": "문제 02 앱 실행", "url": "http://127.0.0.1:5003/", "note": "cd problems/02-HTTP-직접-조작-curl-devtools && python app.py"},
         ],
         "missions": [
             "Network 탭에서 /profile 요청을 'Copy as cURL' 한 후 PowerShell에서 실행",
@@ -76,7 +76,7 @@ PROBLEMS = [
         "solution": "HTTP는 단순한 텍스트 프로토콜이다. 메서드, 헤더, 바디, 쿠키를 직접 쓸 수 있다는 사실을 몸으로 깨닫는 것이 중요. 나중에 Burp가 '이걸 자동으로 편하게 해주는 도구'라는 걸 제대로 이해하게 된다.",
         "secure_snippet": "이 단계는 아직 보안 코드가 아니라 'HTTP를 직접 다루는 근육'을 기르는 단계. 쿠키에 서명 + HttpOnly + Secure + 짧은 만료시간 등을 나중에 적용.",
         "book_refs": "Ch02. 2.2 HTTP 핵심, 2.8~2.10 웹 프록시 & Burp",
-        "lab_target": "02-http-curl-devtools",
+        "lab_target": "problems/02-HTTP-직접-조작-curl-devtools",
         "flags": []
     },
     {
@@ -87,10 +87,10 @@ PROBLEMS = [
         "title": "Burp Suite로 모든 트래픽을 가로채고 Repeater로 무한 반복 공격하기",
         "difficulty": "★★☆☆☆",
         "category": "도구 마스터 / Burp 근력",
-        "objective": "02-http-burp 또는 VulnBoard에서 Burp Proxy를 켜고, 모든 요청을 Intercept → Repeater로 보내 파라미터/쿠키/바디를 자유자재로 변조하는 습관을 들인다.",
+        "objective": "VulnBoard에서 Burp Proxy를 켜고, 모든 요청을 Intercept → Repeater로 보내 파라미터/쿠키/바디를 자유자재로 변조하는 습관을 들인다.",
         "entry_points": [
-            {"label": "VulnBoard (메인 추천)", "url": "http://127.0.0.1:5002/", "note": "cd vulnboard && python app.py"},
-            {"label": "02-http-burp (간단 연습)", "url": "http://127.0.0.1:5001/"},
+            {"label": "VulnBoard (메인)", "url": "http://127.0.0.1:5002/", "note": "python app.py"},
+            {"label": "문제 03 보조 앱", "url": "http://127.0.0.1:5001/", "note": "cd problems/03-Burp-Repeater-마스터 && python app.py"},
         ],
         "missions": [
             "Burp Intercept ON 상태에서 로그인 폼 전송 → body 확인",
@@ -108,7 +108,7 @@ PROBLEMS = [
         "solution": "Burp는 '중간에서 모든 걸 가로채서 편집하고 반복해서 보내는' 기계를 제공한다. 이 근육이 없으면 이후 SQLi, XSS 등에서 10배 이상 고생한다. 책이 'Burp 없이 웹 해킹은 상상도 할 수 없다'고 한 이유.",
         "secure_snippet": "도구 단계라 별도 secure 코드 없음. 다만 실제 서비스에서는 HSTS, CSP, Secure 쿠키 등을 통해 공격자가 쉽게 가로채기 어렵게 만든다.",
         "book_refs": "Ch02. 2.9 Burp Suite의 주요 기능, 2.10 기본 사용법",
-        "lab_target": "VulnBoard + 02-http-burp",
+        "lab_target": "VulnBoard",
         "flags": []
     },
     # ==================== PART 02 - SQLi 핵심 ====================
@@ -454,7 +454,7 @@ PROBLEMS = [
         "category": "시큐어 코딩 / SQLi",
         "objective": "VulnBoard app.py를 열고 # VULNERABLE: 이 붙은 모든 f-string 쿼리를 찾는다. execute_vulnerable_query를 사용한 곳을 전부 ? placeholder 방식으로 고쳐본다. (실제로 고쳐서 /reset 후 테스트 추천)",
         "entry_points": [
-            {"label": "VulnBoard 소스 (app.py)", "url": "파일 열기: vulnboard/app.py"},
+            {"label": "VulnBoard 소스 (app.py)", "url": "파일 열기: app.py"},
             {"label": "취약 쿼리 위치 예시", "url": "http://127.0.0.1:5002/debug/db"},
         ],
         "missions": [
@@ -486,7 +486,7 @@ PROBLEMS = [
         "category": "시큐어 코딩 종합",
         "objective": "app.py의 모든 VULNERABLE 주석 위치를 찾고, 각 공격(Ch05~Ch11)에 해당하는 방어 코드를 직접 머릿속 또는 실제로 작성해본다. 책 Part 03의 각 챕터와 1:1 매칭.",
         "entry_points": [
-            {"label": "전체 소스 분석", "url": "vulnboard/app.py + templates/"},
+            {"label": "전체 소스 분석", "url": "app.py + templates/"},
         ],
         "missions": [
             "Command Injection (ping) → shell=False + 인자 리스트화",

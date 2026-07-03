@@ -638,6 +638,6 @@ if __name__ == '__main__':
     print("접속 주소: http://127.0.0.1:5002")
     print("Burp Suite를 켜고 모든 공격을 연습하세요!")
     print("DB 초기화: /reset")
-    print("힌트/챌린지: vulnboard/HACKING_CHALLENGES.md 참고")
+    print("힌트/챌린지: HACKING_CHALLENGES.md 참고")
     print("=" * 60)
     app.run(host='127.0.0.1', port=5002, debug=True)
