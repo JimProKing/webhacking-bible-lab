@@ -206,6 +206,12 @@ def execute_vulnerable_query(query):
 # Routes
 # ============================================================
 
+@app.route('/health')
+def health_check():
+    """Railway 헬스체크 전용 — 템플릿/DB 없이 즉시 200 반환"""
+    return 'ok', 200
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
