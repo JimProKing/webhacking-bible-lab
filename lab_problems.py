@@ -22,9 +22,9 @@ PROBLEMS = [
         "category": "기초 / 입력값 검증 미흡",
         "objective": "문제 01 전용 앱에서 owner 파라미터를 조작해, 로그인 없이 수미와 관리자의 비밀 정보를 확인한다.",
         "entry_points": [
-            {"label": "문제 01 앱 실행", "url": "http://127.0.0.1:5000/", "note": "cd problems/01-파라미터-변조-기초 && python app.py"},
-            {"label": "수미 메모 공격", "url": "http://127.0.0.1:5000/memo?owner=sumi"},
-            {"label": "admin 플래그 공격", "url": "http://127.0.0.1:5000/memo?owner=admin"},
+            {"label": "문제 01 실습 시작", "url": "/practice/01/", "note": "메인 VulnBoard에 통합됨 (로컬 별도 실행: problems/01-.../app.py)"},
+            {"label": "수미 메모 공격", "url": "/practice/01/memo?owner=sumi"},
+            {"label": "admin 플래그 공격", "url": "/practice/01/memo?owner=admin"},
         ],
         "missions": [
             "chulsu의 정상 메모를 먼저 조회한다",
@@ -54,7 +54,8 @@ PROBLEMS = [
         "category": "HTTP 기초 / Burp 이전 근력",
         "objective": "문제 02 전용 앱에서 curl.exe와 브라우저 Console fetch로 GET/POST/쿠키를 직접 작성·조작한다. Burp 없이도 HTTP를 '손으로' 느끼는 것이 목표.",
         "entry_points": [
-            {"label": "문제 02 앱 실행", "url": "http://127.0.0.1:5003/", "note": "cd problems/02-HTTP-직접-조작-curl-devtools && python app.py"},
+            {"label": "문제 02 실습 시작", "url": "/practice/02/", "note": "메인 VulnBoard에 통합됨 (curl 예시 URL은 페이지에서 자동 변환)"},
+            {"label": "프로필 조작 연습", "url": "/practice/02/profile?user=chulsu"},
         ],
         "missions": [
             "Network 탭에서 /profile 요청을 'Copy as cURL' 한 후 PowerShell에서 실행",
@@ -89,8 +90,8 @@ PROBLEMS = [
         "category": "도구 마스터 / Burp 근력",
         "objective": "VulnBoard에서 Burp Proxy를 켜고, 모든 요청을 Intercept → Repeater로 보내 파라미터/쿠키/바디를 자유자재로 변조하는 습관을 들인다.",
         "entry_points": [
-            {"label": "VulnBoard (메인)", "url": "http://127.0.0.1:5002/", "note": "python app.py"},
-            {"label": "문제 03 보조 앱", "url": "http://127.0.0.1:5001/", "note": "cd problems/03-Burp-Repeater-마스터 && python app.py"},
+            {"label": "VulnBoard (메인 — Burp 연습)", "url": "/", "note": "로그인·프로필 등 메인 사이트에서 Burp Repeater 연습"},
+            {"label": "문제 03 보조 실습", "url": "/practice/03/", "note": "Burp 전용 미니 앱 (메인에 통합)"},
         ],
         "missions": [
             "Burp Intercept ON 상태에서 로그인 폼 전송 → body 확인",
