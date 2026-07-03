@@ -32,7 +32,11 @@
                 <ul class="list-unstyled small">
                     {% for ep in prob.entry_points %}
                     <li class="mb-1">
-                        <a href="{{ ep.url }}" target="_blank" class="btn btn-sm btn-primary me-2">→ {{ ep.label }}</a>
+                        {% if ep.href %}
+                        <a href="{{ ep.href }}" class="btn btn-sm btn-primary me-2">→ {{ ep.label }}</a>
+                        {% else %}
+                        <span class="btn btn-sm btn-outline-secondary disabled me-2">{{ ep.label }}</span>
+                        {% endif %}
                         {% if ep.note %}<span class="text-muted">({{ ep.note }})</span>{% endif %}
                     </li>
                     {% endfor %}

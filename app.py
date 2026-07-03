@@ -32,7 +32,7 @@ from flask import (
     Flask, request, render_template, redirect, url_for,
     session, flash, send_from_directory, make_response, jsonify
 )
-from lab_problems import PROBLEMS, get_problem, get_all_parts, get_progress_stats
+from lab_problems import PROBLEMS, get_problem, get_all_parts, get_progress_stats, prepare_problem, resolve_entry_url
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -228,11 +228,17 @@ def guide():
 # "이 문제집 하나만 끝까지 따라하면 책을 온전히 마스터할 수 있다"
 # ============================================================
 
+@app.template_filter('resolve_lab_url')
+def _resolve_lab_url_filter(url):
+    return resolve_entry_url(url)
+
+
 @app.route('/lab')
 def lab():
     """크리핵티브 웹 해킹 바이블 정복 문제집 - 메인 진입점"""
     parts = get_all_parts()
-    return render_template('lab.html', problems=PROBLEMS, parts=parts)
+    problems = [prepare_problem(p) for p in PROBLEMS]
+    return render_template('lab.html', problems=problems, parts=parts)
 
 @app.route('/problem/<int:pid>')
 def problem_detail(pid):

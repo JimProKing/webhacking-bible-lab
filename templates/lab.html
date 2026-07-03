@@ -73,9 +73,11 @@
 
                 <div class="d-flex flex-wrap gap-1 mb-2">
                     {% for ep in prob.entry_points[:2] %}
-                        <a href="{{ ep.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        {% if ep.href %}
+                        <a href="{{ ep.href }}" class="btn btn-sm btn-outline-primary">
                             {{ ep.label }}
                         </a>
+                        {% endif %}
                     {% endfor %}
                     <a href="/problem/{{ prob.id }}" class="btn btn-sm btn-danger">상세 보기 + 풀이</a>
                 </div>

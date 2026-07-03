@@ -65,7 +65,7 @@ PROBLEMS = [
         ],
         "success_criteria": "admin으로 쿠키를 위장해 myinfo 페이지에서 관리자 권한 내용을 확인한다.",
         "payload_examples": [
-            'curl.exe "http://127.0.0.1:5003/profile?user=admin"',
+            'curl.exe "https://YOUR-SITE/practice/02/profile?user=admin"  (로컬: /practice/02/...)',
             'curl.exe ... -b "session_user=admin"',
             'fetch("/login", {method:"POST", body:..., credentials:"include"})'
         ],
@@ -123,7 +123,7 @@ PROBLEMS = [
         "category": "SQL Injection / 인증 우회",
         "objective": "VulnBoard /login 에서 admin' --  또는 ' OR '1'='1' -- 로 비밀번호를 모른 채 admin 계정으로 로그인한다.",
         "entry_points": [
-            {"label": "로그인 페이지", "url": "http://127.0.0.1:5002/login"},
+            {"label": "로그인 페이지", "url": "/login"},
         ],
         "missions": [
             "chulsu/test123 로 정상 로그인 관찰 (Burp Repeater로 저장)",
@@ -158,8 +158,8 @@ PROBLEMS = [
         "category": "SQL Injection / UNION 기반",
         "objective": "/board 또는 /search 에서 에러 기반으로 컬럼 수를 맞춘 후, UNION SELECT로 users와 secrets 테이블의 데이터를 화면에 뽑아낸다. 특히 FLAG들을 모두 획득.",
         "entry_points": [
-            {"label": "게시판 검색", "url": "http://127.0.0.1:5002/board"},
-            {"label": "고급 검색", "url": "http://127.0.0.1:5002/search"},
+            {"label": "게시판 검색", "url": "/board"},
+            {"label": "고급 검색", "url": "/search"},
         ],
         "missions": [
             "' ORDER BY 1-- 부터 10까지 올려가며 컬럼 수 확인 (에러 나는 직전 숫자)",
@@ -194,8 +194,8 @@ PROBLEMS = [
         "category": "SQL Injection / ID 기반",
         "objective": "/post/1 과 같은 형태의 URL에서 post_id를 조작해 '1' OR '1'='1 또는 UNION을 주입, 다른 게시글/비밀 데이터를 가져온다.",
         "entry_points": [
-            {"label": "게시판에서 글 클릭 후 주소 수정", "url": "http://127.0.0.1:5002/post/1"},
-            {"label": "직접 공격 예시", "url": "http://127.0.0.1:5002/post/1'"},
+            {"label": "게시판에서 글 클릭 후 주소 수정", "url": "/post/1"},
+            {"label": "직접 공격 예시", "url": "/post/1'"},
         ],
         "missions": [
             "/post/1' 로 에러 유발해서 쿼리 구조 파악",
@@ -228,8 +228,8 @@ PROBLEMS = [
         "category": "SQL Injection / Blind",
         "objective": "에러가 안 나는 환경에서 SUBSTR + AND 조건으로 admin 비밀번호나 secrets flag를 한 글자씩 알아낸다. 응답의 '결과 있음/없음' 차이를 이용.",
         "entry_points": [
-            {"label": "고급 검색 (추천)", "url": "http://127.0.0.1:5002/search"},
-            {"label": "게시판 검색", "url": "http://127.0.0.1:5002/board"},
+            {"label": "고급 검색 (추천)", "url": "/search"},
+            {"label": "게시판 검색", "url": "/board"},
         ],
         "missions": [
             "1' AND 1=1 --  vs  1' AND 1=2 --  로 응답 차이 관찰",
@@ -263,7 +263,7 @@ PROBLEMS = [
         "category": "SQL Injection / Blind",
         "objective": "응답 시간 차이를 이용해 데이터를 추출. 앱 내부에 의도적으로 time.sleep 조건 분기를 넣어두었음. 실제 DB SLEEP(pg_sleep, SLEEP()) 연습도 함께.",
         "entry_points": [
-            {"label": "고급 검색", "url": "http://127.0.0.1:5002/search?q=1'"},
+            {"label": "고급 검색", "url": "/search?q=1'"},
         ],
         "missions": [
             "특정 조건이 참일 때만 sleep(3) 정도가 걸리도록 페이로드 작성",
@@ -296,7 +296,7 @@ PROBLEMS = [
         "category": "Command Injection",
         "objective": "/tools/ping 에서 host 값을 127.0.0.1 & whoami 또는 127.0.0.1 | dir 로 조작해 서버에서 임의 명령을 실행한다.",
         "entry_points": [
-            {"label": "Ping 도구", "url": "http://127.0.0.1:5002/tools/ping"},
+            {"label": "Ping 도구", "url": "/tools/ping"},
         ],
         "missions": [
             "127.0.0.1 & whoami 로 현재 사용자 확인",
@@ -326,7 +326,7 @@ PROBLEMS = [
         "category": "XSS / Stored",
         "objective": "아무 게시글에 댓글을 작성할 때 <script>alert(document.cookie)</script> 또는 더 나아가 쿠키를 외부로 보내는 페이로드를 저장한다. Stored XSS의 위험성을 몸으로 느낀다.",
         "entry_points": [
-            {"label": "게시글 상세 + 댓글", "url": "http://127.0.0.1:5002/post/1"},
+            {"label": "게시글 상세 + 댓글", "url": "/post/1"},
         ],
         "missions": [
             "댓글에 <script>alert('XSS')</script> 작성 후 게시글 다시 보기",
@@ -359,7 +359,7 @@ PROBLEMS = [
         "category": "CSRF",
         "objective": "/settings 에서 CSRF 토큰 없이 이메일을 변경할 수 있음을 확인. 실제 공격 시나리오를 상상하고, 나중에 다른 사이트의 폼으로 요청을 보내는 공격을 이해한다.",
         "entry_points": [
-            {"label": "설정 페이지 (로그인 필요)", "url": "http://127.0.0.1:5002/settings"},
+            {"label": "설정 페이지 (로그인 필요)", "url": "/settings"},
         ],
         "missions": [
             "로그인 후 /settings 에서 이메일 변경 정상 동작 확인",
@@ -368,7 +368,7 @@ PROBLEMS = [
         ],
         "success_criteria": "CSRF 토큰 부재를 확인하고, 왜 이게 위험한지 설명할 수 있다.",
         "payload_examples": [
-            "<form action='http://127.0.0.1:5002/settings' method='POST'> <input name='email' value='hacked@evil.com'> ... </form>"
+            "<form action='/settings' method='POST'> <input name='email' value='hacked@evil.com'> ... </form>"
         ],
         "hints": [
             "POST 요청에 CSRF 토큰이나 SameSite 쿠키 정책이 전혀 없다.",
@@ -391,8 +391,8 @@ PROBLEMS = [
         "category": "파일 관련",
         "objective": "/download?file=... 로 ../ 를 사용해 상위 디렉토리 파일 읽기. /upload 로 악성 파일(웹쉘) 업로드 후 실행 시도.",
         "entry_points": [
-            {"label": "다운로드", "url": "http://127.0.0.1:5002/download?file=notice.txt"},
-            {"label": "파일 업로드", "url": "http://127.0.0.1:5002/upload"},
+            {"label": "다운로드", "url": "/download?file=notice.txt"},
+            {"label": "파일 업로드", "url": "/upload"},
         ],
         "missions": [
             "/download?file=../../../app.py 또는 vulnboard.db 시도",
@@ -422,8 +422,8 @@ PROBLEMS = [
         "category": "접근 제어 미흡 / IDOR",
         "objective": "로그인하지 않았거나 일반 사용자로 /profile/admin, /profile/sumi, /admin 에 직접 접근하거나, Burp로 username이나 is_admin을 조작해 권한을 얻는다.",
         "entry_points": [
-            {"label": "프로필 (IDOR)", "url": "http://127.0.0.1:5002/profile/admin"},
-            {"label": "관리자 패널", "url": "http://127.0.0.1:5002/admin"},
+            {"label": "프로필 (IDOR)", "url": "/profile/admin"},
+            {"label": "관리자 패널", "url": "/admin"},
         ],
         "missions": [
             "일반 계정(chulsu)으로 로그인 후 /profile/sumi 직접 이동",
@@ -455,8 +455,8 @@ PROBLEMS = [
         "category": "시큐어 코딩 / SQLi",
         "objective": "VulnBoard app.py를 열고 # VULNERABLE: 이 붙은 모든 f-string 쿼리를 찾는다. execute_vulnerable_query를 사용한 곳을 전부 ? placeholder 방식으로 고쳐본다. (실제로 고쳐서 /reset 후 테스트 추천)",
         "entry_points": [
-            {"label": "VulnBoard 소스 (app.py)", "url": "파일 열기: app.py"},
-            {"label": "취약 쿼리 위치 예시", "url": "http://127.0.0.1:5002/debug/db"},
+            {"label": "VulnBoard 소스 (app.py)", "url": None, "note": "저장소 루트 app.py — IDE에서 열기 (웹 링크 아님)"},
+            {"label": "취약 쿼리 위치 예시", "url": "/debug/db"},
         ],
         "missions": [
             "app.py에서 f\"... WHERE ... '{variable}'\" 형태의 쿼리 전부 찾기 (board, post, login, search 등)",
@@ -487,7 +487,7 @@ PROBLEMS = [
         "category": "시큐어 코딩 종합",
         "objective": "app.py의 모든 VULNERABLE 주석 위치를 찾고, 각 공격(Ch05~Ch11)에 해당하는 방어 코드를 직접 머릿속 또는 실제로 작성해본다. 책 Part 03의 각 챕터와 1:1 매칭.",
         "entry_points": [
-            {"label": "전체 소스 분석", "url": "app.py + templates/"},
+            {"label": "전체 소스 분석", "url": None, "note": "app.py + templates/ — IDE에서 열기"},
         ],
         "missions": [
             "Command Injection (ping) → shell=False + 인자 리스트화",
@@ -514,10 +514,57 @@ PROBLEMS = [
 
 # ==================== 헬퍼 함수 ====================
 
+_LOCALHOST_PREFIXES = (
+    ("http://127.0.0.1:5002", ""),
+    ("http://127.0.0.1:5003", "/practice/02"),
+    ("http://127.0.0.1:5000", "/practice/01"),
+    ("http://127.0.0.1:5001", "/practice/03"),
+)
+
+
+def resolve_entry_url(url):
+    """문제 진입점 URL을 현재 배포 환경(로컬/Railway)에서 동작하는 경로로 변환"""
+    if url is None:
+        return None
+    if not isinstance(url, str):
+        return None
+    url = url.strip()
+    if not url:
+        return None
+    if url.startswith("/"):
+        return url
+    for prefix, replacement in _LOCALHOST_PREFIXES:
+        if url.startswith(prefix):
+            return replacement + url[len(prefix):]
+    if url.startswith("http://") or url.startswith("https://"):
+        if "127.0.0.1" in url or "localhost" in url:
+            return None
+        return url
+    return None
+
+
+def _prepare_entry_points(entry_points):
+    prepared = []
+    for ep in entry_points:
+        item = dict(ep)
+        item["href"] = resolve_entry_url(ep.get("url"))
+        prepared.append(item)
+    return prepared
+
+
+def prepare_problem(prob):
+    """템플릿용: 진입점 href 필드 추가"""
+    if not prob:
+        return prob
+    out = dict(prob)
+    out["entry_points"] = _prepare_entry_points(prob.get("entry_points", []))
+    return out
+
+
 def get_problem(pid: int):
     for p in PROBLEMS:
         if p["id"] == pid:
-            return p
+            return prepare_problem(p)
     return None
 
 def get_problems_by_part(part_name: str):
