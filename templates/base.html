@@ -26,13 +26,7 @@
     {% block content %}{% endblock %}
 </div>
 
-<footer class="container mt-5 text-muted small">
-    <hr>
-    VulnBoard — 크리핵티브의 한 권으로 끝내는 웹 해킹 바이블 실습용 취약 타겟<br>
-    <strong>이 사이트는 학습 목적으로만 사용하세요.</strong> 모든 취약점은 의도적입니다.<br>
-    <span class="text-primary">📖 상단의 "학습 가이드" 버튼을 눌러서 단계별 설명을 따라가세요!</span><br>
-    Burp Suite를 항상 켜고 연습하세요. 소스 코드를 열어서 "VULNERABLE" 주석을 찾아보세요.
-</footer>
+{% include '_footer.html' %}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -34,30 +34,40 @@ def _patch_html(html: str, prefix: str) -> str:
     return html
 
 
+_FOOTER_MARKER = "caramel2516@naver.com"
+
+
 def _inject_site_shell(html: str, prefix: str) -> str:
-    """미니 앱 페이지에 VulnBoard 글로벌 네비게이션 바 주입"""
-    if not isinstance(html, str) or '<nav class="navbar' in html:
+    """미니 앱 페이지에 VulnBoard 글로벌 navbar·footer 주입"""
+    if not isinstance(html, str):
         return html
 
-    problem_num = prefix.rstrip("/").split("/")[-1]
-    problem_id = int(problem_num) if problem_num.isdigit() else 0
+    if '<nav class="navbar' not in html:
+        problem_num = prefix.rstrip("/").split("/")[-1]
+        problem_id = int(problem_num) if problem_num.isdigit() else 0
 
-    navbar = render_template("_navbar.html")
-    banner = render_template(
-        "_practice_banner.html",
-        prefix=prefix,
-        problem_num=problem_num,
-        problem_id=problem_id,
-    )
+        navbar = render_template("_navbar.html")
+        banner = render_template(
+            "_practice_banner.html",
+            prefix=prefix,
+            problem_num=problem_num,
+            problem_id=problem_id,
+        )
 
-    if "padding-top: 70px" not in html and "padding-top:70px" not in html:
-        html = html.replace("</head>", "<style>body{padding-top:70px}</style></head>", 1)
+        if "padding-top: 70px" not in html and "padding-top:70px" not in html:
+            html = html.replace("</head>", "<style>body{padding-top:70px}</style></head>", 1)
 
-    body_match = re.search(r"<body[^>]*>", html)
-    if body_match:
-        html = html[: body_match.end()] + navbar + banner + html[body_match.end() :]
+        body_match = re.search(r"<body[^>]*>", html)
+        if body_match:
+            html = html[: body_match.end()] + navbar + banner + html[body_match.end() :]
 
-    if "bootstrap.bundle.min.js" not in html:
+    if _FOOTER_MARKER not in html:
+        footer = render_template("_footer.html")
+        if "bootstrap.bundle.min.js" in html:
+            html = html.replace(_BOOTSTRAP_JS, footer + _BOOTSTRAP_JS, 1)
+        else:
+            html = html.replace("</body>", footer + _BOOTSTRAP_JS + "</body>", 1)
+    elif "bootstrap.bundle.min.js" not in html:
         html = html.replace("</body>", _BOOTSTRAP_JS + "</body>", 1)
 
     return html
