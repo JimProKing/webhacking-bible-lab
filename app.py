@@ -631,13 +631,20 @@ def reset_db():
 # Templates are in templates/ folder (we will create them)
 # ============================================================
 
+# gunicorn/Railway 배포 시에도 DB가 준비되도록 import 시점에 초기화
+init_db()
+
+
 if __name__ == '__main__':
-    init_db()
+    port = int(os.environ.get('PORT', 5002))
+    debug = os.environ.get('FLASK_DEBUG', '1') == '1'
+    host = '127.0.0.1' if debug else '0.0.0.0'
+
     print("=" * 60)
     print("VulnBoard (취약 게시판) 시작")
-    print("접속 주소: http://127.0.0.1:5002")
+    print(f"접속 주소: http://{host}:{port}")
     print("Burp Suite를 켜고 모든 공격을 연습하세요!")
     print("DB 초기화: /reset")
     print("힌트/챌린지: HACKING_CHALLENGES.md 참고")
     print("=" * 60)
-    app.run(host='127.0.0.1', port=5002, debug=True)
+    app.run(host=host, port=port, debug=debug)
