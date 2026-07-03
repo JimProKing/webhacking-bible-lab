@@ -5,9 +5,14 @@
 
 import importlib.util
 import os
+import re
 from functools import wraps
 
-from flask import request
+from flask import Response, render_template, request
+
+_BOOTSTRAP_JS = (
+    '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>'
+)
 
 
 def _patch_html(html: str, prefix: str) -> str:
@@ -29,12 +34,54 @@ def _patch_html(html: str, prefix: str) -> str:
     return html
 
 
+def _inject_site_shell(html: str, prefix: str) -> str:
+    """미니 앱 페이지에 VulnBoard 글로벌 네비게이션 바 주입"""
+    if not isinstance(html, str) or '<nav class="navbar' in html:
+        return html
+
+    problem_num = prefix.rstrip("/").split("/")[-1]
+    problem_id = int(problem_num) if problem_num.isdigit() else 0
+
+    navbar = render_template("_navbar.html")
+    banner = render_template(
+        "_practice_banner.html",
+        prefix=prefix,
+        problem_num=problem_num,
+        problem_id=problem_id,
+    )
+
+    if "padding-top: 70px" not in html and "padding-top:70px" not in html:
+        html = html.replace("</head>", "<style>body{padding-top:70px}</style></head>", 1)
+
+    body_match = re.search(r"<body[^>]*>", html)
+    if body_match:
+        html = html[: body_match.end()] + navbar + banner + html[body_match.end() :]
+
+    if "bootstrap.bundle.min.js" not in html:
+        html = html.replace("</body>", _BOOTSTRAP_JS + "</body>", 1)
+
+    return html
+
+
+def _finalize_response(result, prefix: str):
+    if isinstance(result, Response):
+        html = result.get_data(as_text=True)
+        html = _inject_site_shell(_patch_html(html, prefix), prefix)
+        result.set_data(html.encode("utf-8"))
+        if not result.content_type:
+            result.content_type = "text/html; charset=utf-8"
+        return result
+    if isinstance(result, str):
+        return _inject_site_shell(_patch_html(result, prefix), prefix)
+    return result
+
+
 def _wrap_view(view_func, prefix: str):
     @wraps(view_func)
     def wrapped(*args, **kwargs):
         with _practice_request_context(prefix):
             result = view_func(*args, **kwargs)
-        return _patch_html(result, prefix)
+        return _finalize_response(result, prefix)
 
     return wrapped
 
