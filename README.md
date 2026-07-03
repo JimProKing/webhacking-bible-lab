@@ -7,6 +7,10 @@
 
 > **교육용 전용.** 실제 서비스나 남의 시스템에 쓰지 마세요.
 
+**🌐 배포 사이트 (Railway):** [https://web-production-debfb.up.railway.app/](https://web-production-debfb.up.railway.app/)
+
+로컬 설치 없이 바로 접속해서 문제집(`/lab`)과 실습을 시작할 수 있습니다. Burp로 본격 연습할 때는 로컬 실행을 권장합니다.
+
 ---
 
 ## 이 저장소에서 하는 일
@@ -22,6 +26,10 @@
 ---
 
 ## 30초 만에 시작
+
+**가장 빠른 방법:** [배포 사이트](https://web-production-debfb.up.railway.app/) 열기 → [정복 문제집](https://web-production-debfb.up.railway.app/lab)에서 문제 01부터
+
+**로컬에서 실행:**
 
 ```powershell
 git clone https://github.com/JimProKing/webhacking-bible-lab.git
